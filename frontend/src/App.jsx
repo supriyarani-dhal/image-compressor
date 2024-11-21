@@ -1,14 +1,20 @@
-import ImageCompressor from "./components/ImageCompressor";
-import "./App.css";
+/* eslint-disable react/prop-types */
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Dashboard from "./pages/Dashboard";
+
+import { Toaster } from "./components/ui/toaster";
 
 function App() {
   return (
-    <div className="App">
+    <BrowserRouter>
+      <Toaster />
       <Navbar />
-      <h1>Image Compressor & Converter</h1>
-      <ImageCompressor />
-    </div>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

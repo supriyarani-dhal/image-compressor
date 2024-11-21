@@ -1,8 +1,8 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable no-unused-vars */
-import { Box, Image, Link } from "@chakra-ui/react";
+import { Box, Image, Link, Text } from "@chakra-ui/react";
 import React from "react";
-import Profile from "./Profile";
+import Profile from "../pages/Profile";
 
 const Navbar = () => {
   return (
@@ -14,7 +14,6 @@ const Navbar = () => {
       color="white"
       fontSize="2xl"
       textAlign="center"
-      position="fixed"
       zIndex="sticky"
       display={"flex"}
       justifyContent={"space-between"}
@@ -28,6 +27,7 @@ const Navbar = () => {
           fit="cover"
           alt="Pix Compress"
         />
+        <Text fontWeight={"bold"}>Pix Compress</Text>
       </Link>
       <Profile />
     </Box>
