@@ -8,9 +8,13 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import * as functions from "firebase-functions";
+
+// Access the API key
+const apiKey = functions.config().api.key;
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB1xoizIE1z_hnbJyvFB_qlWo7kENKXCCw",
+  apikey: apiKey,
   authDomain: "pix-compress.firebaseapp.com",
   projectId: "pix-compress",
   storageBucket: "pix-compress.firebasestorage.app",
