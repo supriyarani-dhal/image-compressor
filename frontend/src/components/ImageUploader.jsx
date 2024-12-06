@@ -1,15 +1,20 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from "react";
-import { Box, Input, Text, Button, Select, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Input,
+  Text,
+  Button,
+  Select,
+  Flex,
+  Stack,
+  Badge,
+} from "@chakra-ui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
 import imageCompression from "browser-image-compression";
 import { saveAs } from "file-saver";
-import {
-  FileUploadDropzone,
-  FileUploadList,
-  FileUploadRoot,
-} from "./ui/file-upload";
+import { WiCloudUp } from "react-icons/wi";
 
 const ImageUploader = () => {
   const [images, setImages] = useState([]); // Array of original images
@@ -17,16 +22,36 @@ const ImageUploader = () => {
   const [selectedSize, setSelectedSize] = useState({});
   const [selectedFormat, setSelectedFormat] = useState("jpeg");
 
-  const handleImageUpload = (val) => {
-    const files = Array.from(val.files);
+  const handleImageUpload = (selectedFiles) => {
+    console.log(selectedFiles);
 
-    const imageFiles = files.map((file) => ({
-      file,
-      preview: URL.createObjectURL(file),
-      size: file.size,
-    }));
-    setImages(imageFiles);
-    setCompressedImages([]);
+    // const files = Array.from(val.files);
+
+    // const imageFiles = files.map((file) => ({
+    //   file,
+    //   preview: URL.createObjectURL(file),
+    //   size: file.size,
+    // }));
+    // setImages(imageFiles);
+    // setCompressedImages([]);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    handleImageUpload(droppedFiles);
+  };
+
+  const handleFileInputChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    handleImageUpload(selectedFiles);
   };
 
   const handleSizeChange = (fileName, newSize) => {
@@ -69,49 +94,62 @@ const ImageUploader = () => {
   };
 
   return (
-    <Box p={4} h={"100vh"} bg={"white"}>
-      {/* Image Upload */}
+    <Box p={8} h={"100vh"} bg={"white"}>
+      {/* Hidden File Input */}
       <Input
         type="file"
+        id="file-input"
+        style={{ display: "none" }}
         multiple
-        accept="image/*"
-        onChange={(e) => handleImageUpload(e.target)}
-        mb={4}
+        accept={["image/*"]}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+        onChange={handleFileInputChange}
       />
-      {/* <FileUploadRoot maxW="xl" alignItems="stretch" maxFiles={10}>
-        <FileUploadDropzone
-          label="Drag and drop here to upload"
-          description=".png, .jpg up to 5MB"
-          onChange={handleImageUpload}
-        />
-      </FileUploadRoot> */}
 
-      {/* Image Carousel */}
-      {images.length > 0 && (
-        <Box mb={4}>
-          <Text fontWeight="bold" mb={2}>
-            Uploaded Images
+      {/* Custom Button for File Input*/}
+      <label htmlFor="file-input">
+        <Box
+          htmlFor="file-input"
+          mb={4}
+          cursor="pointer"
+          bg="blue.50"
+          h="80%"
+          border="0.5px dashed #3182ce"
+          borderRadius="md"
+          p={4}
+          display="flex"
+          flexDirection="column"
+          justifyContent={"center"}
+          alignItems={"center"}
+          _hover={{ borderColor: "blue.400" }}
+        >
+          <WiCloudUp size={"100px"} color="#14204a" mx="300px" />
+
+          <Text fontSize="lg" mb={2} color={"blue.500"}>
+            Drag and drop files here
           </Text>
-          <Swiper spaceBetween={10} slidesPerView={3}>
-            {images.map((img, idx) => (
-              <SwiperSlide key={idx}>
-                <img
-                  src={img.preview}
-                  alt={`Image ${idx + 1}`}
-                  style={{
-                    maxWidth: "100%",
-                    height: "150px",
-                    objectFit: "cover",
-                  }}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <Text fontSize="sm" color="gray.500">
+            or click to select files
+          </Text>
+
+          <Stack direction="row" color={"black"} mt="2">
+            Supported formats:
+            <Badge colorPalette="green" variant={"solid"}>
+              .png
+            </Badge>
+            <Badge colorPalette="red" variant={"solid"}>
+              .jpeg
+            </Badge>
+            <Badge colorPalette="purple" variant={"solid"}>
+              .webp
+            </Badge>
+          </Stack>
         </Box>
-      )}
+      </label>
 
       {/* Image Options */}
-      {images.length > 0 && (
+      {/*{images.length > 0 && (
         <Box>
           {images.map((img, idx) => (
             <Box
@@ -157,7 +195,7 @@ const ImageUploader = () => {
       )}
 
       {/* Process and Download */}
-      {images.length > 0 && (
+      {/*{images.length > 0 && (
         <Flex justifyContent="space-between" mt={4}>
           <Button colorScheme="blue" onClick={processImages}>
             Process Images
@@ -167,9 +205,8 @@ const ImageUploader = () => {
           </Button>
         </Flex>
       )}
-
       {/* Compressed Image Preview */}
-      {compressedImages.length > 0 && (
+      {/*{compressedImages.length > 0 && (
         <Box mt={6}>
           <Text fontWeight="bold" mb={2}>
             Compressed Images Preview
@@ -190,7 +227,8 @@ const ImageUploader = () => {
             ))}
           </Swiper>
         </Box>
-      )}
+      )}{" "}
+      */}
     </Box>
   );
 };
